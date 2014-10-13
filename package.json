@@ -1,0 +1,25 @@
+{
+  "name": "yagui",
+  "version": "0.0.5",
+  "description": "Yet another javascript gui (for canvas centered WebGL app)",
+  "dependencies": {
+    "grunt": "*",
+    "grunt-requirejs": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-jshint": "*"
+  },
+  "scripts": {
+    "test": "no test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stephomi/yagui.git"
+  },
+  "author": "Stéphane GINIER",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stephomi/yagui/issues"
+  },
+  "homepage": "https://github.com/stephomi/yagui"
+}
