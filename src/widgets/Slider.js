@@ -70,7 +70,7 @@ define([
       this.domContainer = container;
     },
     getValue: function () {
-      return this.domInputText.value;
+      return parseFloat(this.domInputText.value);
     },
     setValue: function (val, ignoreCB) {
       this.lastValue = val;
