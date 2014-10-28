@@ -829,7 +829,7 @@ define('widgets/Slider',[
 
   Slider.prototype = {
     _onInputText: function (ev) {
-      var val = parseInt(ev.target.value, 10);
+      var val = parseFloat(ev.target.value);
       if (val !== val || val === this.lastValue) return;
       this.setValue(val);
     },
@@ -883,14 +883,41 @@ define('widgets/Slider',[
 
   return Slider;
 });
+define('widgets/Title',[
+  'utils/GuiUtils',
+  'widgets/BaseWidget'
+], function (GuiUtils, BaseWidget) {
+
+  
+
+  var Title = function (name) {
+    this.domText = document.createElement('div');
+    this.domText.innerHTML = name || '';
+    this.domText.className = 'group-title';
+  };
+
+  Title.prototype = {
+    setText: function (text) {
+      this.domText.innerHTML = text;
+    },
+    setVisibility: function (visible) {
+      this.domText.hidden = !visible;
+    }
+  };
+
+  GuiUtils.makeProxy(BaseWidget, Title);
+
+  return Title;
+});
 define('containers/BaseContainer',[
   'widgets/BaseWidget',
   'widgets/Button',
   'widgets/Checkbox',
   'widgets/Color',
   'widgets/Combobox',
-  'widgets/Slider'
-], function (BaseWidget, Button, Checkbox, Color, Combobox, Slider) {
+  'widgets/Slider',
+  'widgets/Title'
+], function (BaseWidget, Button, Checkbox, Color, Combobox, Slider, Title) {
 
   
 
@@ -913,11 +940,12 @@ define('containers/BaseContainer',[
       domLabel.innerHTML = name || '';
       return domLabel;
     },
+    _setDomContainer: function (container) {
+      this.domContainer = container;
+    },
     addTitle: function (name) {
-      var widget = new BaseWidget();
-      var domTitle = this._addLine(name);
-      domTitle.className = 'group-title';
-      widget._setDomContainer(domTitle);
+      var widget = new Title(name);
+      this.domUl.appendChild(widget.domText);
       return widget;
     },
     addCheckbox: function (name, valOrObject, callbackOrKey) {
@@ -981,6 +1009,10 @@ define('containers/BaseContainer',[
       widget1._setDomContainer(domLine);
       widget2._setDomContainer(domLine);
       return [widget1, widget2];
+    },
+    setVisibility: function (visible) {
+      if (!this.domContainer) return;
+      this.domContainer.hidden = !visible;
     }
   };
 
@@ -1018,6 +1050,11 @@ define('containers/Folder',[
     close: function () {
       this.isOpen = false;
       this.domUl.setAttribute('opened', false);
+    },
+    setVisibility: function (visible) {
+      if (!visible)
+        this.close();
+      this.domUl.style.height = visible ? '35px' : '0px';
     }
   };
 
@@ -1305,6 +1342,7 @@ define('containers/Topbar',[
       li.innerHTML = name || '';
       this.domUl.appendChild(li);
       li.appendChild(menu.domUl);
+      menu._setDomContainer(li);
       return menu;
     },
     addExtra: function () {
