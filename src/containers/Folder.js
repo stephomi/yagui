@@ -30,6 +30,11 @@ define([
     close: function () {
       this.isOpen = false;
       this.domUl.setAttribute('opened', false);
+    },
+    setVisibility: function (visible) {
+      if (!visible)
+        this.close();
+      this.domUl.style.height = visible ? '35px' : '0px';
     }
   };
 

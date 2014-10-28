@@ -34,6 +34,7 @@ define([
       li.innerHTML = name || '';
       this.domUl.appendChild(li);
       li.appendChild(menu.domUl);
+      menu._setDomContainer(li);
       return menu;
     },
     addExtra: function () {

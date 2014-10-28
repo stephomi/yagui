@@ -4,8 +4,9 @@ define([
   'widgets/Checkbox',
   'widgets/Color',
   'widgets/Combobox',
-  'widgets/Slider'
-], function (BaseWidget, Button, Checkbox, Color, Combobox, Slider) {
+  'widgets/Slider',
+  'widgets/Title'
+], function (BaseWidget, Button, Checkbox, Color, Combobox, Slider, Title) {
 
   'use strict';
 
@@ -28,11 +29,12 @@ define([
       domLabel.innerHTML = name || '';
       return domLabel;
     },
+    _setDomContainer: function (container) {
+      this.domContainer = container;
+    },
     addTitle: function (name) {
-      var widget = new BaseWidget();
-      var domTitle = this._addLine(name);
-      domTitle.className = 'group-title';
-      widget._setDomContainer(domTitle);
+      var widget = new Title(name);
+      this.domUl.appendChild(widget.domText);
       return widget;
     },
     addCheckbox: function (name, valOrObject, callbackOrKey) {
@@ -96,6 +98,10 @@ define([
       widget1._setDomContainer(domLine);
       widget2._setDomContainer(domLine);
       return [widget1, widget2];
+    },
+    setVisibility: function (visible) {
+      if (!this.domContainer) return;
+      this.domContainer.hidden = !visible;
     }
   };
 
