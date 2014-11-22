@@ -42,7 +42,7 @@ define([
 
   Slider.prototype = {
     _onInputText: function (ev) {
-      var val = parseInt(ev.target.value, 10);
+      var val = parseFloat(ev.target.value);
       if (val !== val || val === this.lastValue) return;
       this.setValue(val);
     },
