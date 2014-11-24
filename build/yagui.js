@@ -1104,6 +1104,7 @@ define('containers/Sidebar',[
       this.mouseX = ev.clientX;
     },
     _updateCanvasPosition: function (canvas) {
+      if (this.domSidebar.hidden) return;
       var w = this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
         canvas.width -= w;
@@ -1137,6 +1138,10 @@ define('containers/Sidebar',[
       var folder = new Folder(name);
       this.domSidebar.appendChild(folder.domUl);
       return folder;
+    },
+    setVisibility: function (visible) {
+      this.domSidebar.hidden = !visible;
+      this.callbackResize();
     }
   };
 
@@ -1313,18 +1318,20 @@ define('containers/Topbar',[
 
   
 
-  var Topbar = function () {
+  var Topbar = function (callbackResize) {
     this.domTopbar = document.createElement('div');
     this.domTopbar.className = 'gui-topbar';
 
     this.domUl = document.createElement('ul');
     this.domTopbar.appendChild(this.domUl);
 
+    this.callbackResize = callbackResize;
     this.uiExtra = {};
   };
 
   Topbar.prototype = {
     _updateCanvasPosition: function (canvas) {
+      if (this.domTopbar.hidden) return;
       var h = this.domTopbar.offsetHeight;
       canvas.style.top = h + 'px';
       canvas.height -= h;
@@ -1358,6 +1365,10 @@ define('containers/Topbar',[
       ext.textColor = menu.addColor('Text', EditStyle._curTextColor, cb.bind(this, EditStyle.changeTextColor));
       ext.showBorder = menu.addCheckbox('Border', EditStyle._curShowBorder, EditStyle.changeDisplayBoorder);
       return menu;
+    },
+    setVisibility: function (visible) {
+      this.domTopbar.hidden = !visible;
+      this.callbackResize();
     }
   };
 
@@ -1394,6 +1405,8 @@ define('GuiMain',[
       if (this.domCanvas) {
         this.domCanvas.width = window.innerWidth;
         this.domCanvas.height = window.innerHeight;
+        this.domCanvas.left = 0;
+        this.domCanvas.top = 0;
         if (this.leftSidebar)
           this.leftSidebar._updateCanvasPosition(this.domCanvas);
         if (this.rightSidebar)
@@ -1434,12 +1447,16 @@ define('GuiMain',[
       return this.rightSidebar;
     },
     addTopbar: function () {
-      this.topbar = new Topbar();
+      this.topbar = new Topbar(this.cbResize_);
       this.domMain.appendChild(this.topbar.domTopbar);
 
       this._updateSidebarsPosition();
       this.topbar._updateCanvasPosition(this.domCanvas);
       return this.topbar;
+    },
+    setVisibility: function (visible) {
+      this.domMain.hidden = !visible;
+      this._onWindowResize();
     }
   };
 
