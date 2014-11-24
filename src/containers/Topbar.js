@@ -5,18 +5,20 @@ define([
 
   'use strict';
 
-  var Topbar = function () {
+  var Topbar = function (callbackResize) {
     this.domTopbar = document.createElement('div');
     this.domTopbar.className = 'gui-topbar';
 
     this.domUl = document.createElement('ul');
     this.domTopbar.appendChild(this.domUl);
 
+    this.callbackResize = callbackResize;
     this.uiExtra = {};
   };
 
   Topbar.prototype = {
     _updateCanvasPosition: function (canvas) {
+      if (this.domTopbar.hidden) return;
       var h = this.domTopbar.offsetHeight;
       canvas.style.top = h + 'px';
       canvas.height -= h;
@@ -50,6 +52,10 @@ define([
       ext.textColor = menu.addColor('Text', EditStyle._curTextColor, cb.bind(this, EditStyle.changeTextColor));
       ext.showBorder = menu.addCheckbox('Border', EditStyle._curShowBorder, EditStyle.changeDisplayBoorder);
       return menu;
+    },
+    setVisibility: function (visible) {
+      this.domTopbar.hidden = !visible;
+      this.callbackResize();
     }
   };
 

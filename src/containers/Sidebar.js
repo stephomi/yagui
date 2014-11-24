@@ -40,6 +40,7 @@ define([
       this.mouseX = ev.clientX;
     },
     _updateCanvasPosition: function (canvas) {
+      if (this.domSidebar.hidden) return;
       var w = this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
         canvas.width -= w;
@@ -73,6 +74,10 @@ define([
       var folder = new Folder(name);
       this.domSidebar.appendChild(folder.domUl);
       return folder;
+    },
+    setVisibility: function (visible) {
+      this.domSidebar.hidden = !visible;
+      this.callbackResize();
     }
   };
 

@@ -29,6 +29,8 @@ define([
       if (this.domCanvas) {
         this.domCanvas.width = window.innerWidth;
         this.domCanvas.height = window.innerHeight;
+        this.domCanvas.left = 0;
+        this.domCanvas.top = 0;
         if (this.leftSidebar)
           this.leftSidebar._updateCanvasPosition(this.domCanvas);
         if (this.rightSidebar)
@@ -69,12 +71,16 @@ define([
       return this.rightSidebar;
     },
     addTopbar: function () {
-      this.topbar = new Topbar();
+      this.topbar = new Topbar(this.cbResize_);
       this.domMain.appendChild(this.topbar.domTopbar);
 
       this._updateSidebarsPosition();
       this.topbar._updateCanvasPosition(this.domCanvas);
       return this.topbar;
+    },
+    setVisibility: function (visible) {
+      this.domMain.hidden = !visible;
+      this._onWindowResize();
     }
   };
 
