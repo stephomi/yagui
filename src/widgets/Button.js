@@ -17,6 +17,9 @@ define([
   };
 
   Button.prototype = {
+    setEnable: function (bool) {
+      this.domButton.disabled = bool === undefined ? false : !bool;
+    },
     _onClick: function () {
       if (this.callback) this.callback();
     }
