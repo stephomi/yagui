@@ -8,8 +8,24 @@ define([
 
   EditStyle.refRules = {};
 
+  var yaguiSheet;
+  var findSheet = function () {
+    if (yaguiSheet) return yaguiSheet;
+    var sheets = document.styleSheets;
+    for (var i = 0, nb = sheets.length; i < nb; ++i) {
+      var href = sheets[i].href;
+      if (href && href.indexOf('yagui.css') !== -1) {
+        yaguiSheet = sheets[i];
+        return yaguiSheet;
+      }
+    }
+    return;
+  };
+
   var editStyle = function (selector, key, value) {
-    var sheet = document.styleSheets[document.styleSheets.length - 1];
+    var sheet = findSheet();
+    if (!sheet)
+      return;
     var rules = sheet.cssRules || sheet.rules;
     var rule = EditStyle.refRules[selector];
     if (!rule) {
@@ -23,7 +39,6 @@ define([
     }
     if (rule)
       rule.style[key] = value;
-    return true;
   };
 
   EditStyle.changeWidgetsColor = function (color) {
