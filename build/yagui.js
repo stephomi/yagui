@@ -1110,8 +1110,7 @@ define('containers/Sidebar',[
       this.mouseX = ev.clientX;
     },
     _updateCanvasPosition: function (canvas) {
-      if (this.domSidebar.hidden) return;
-      var w = this.domSidebar.offsetWidth;
+      var w = this.domSidebar.hidden ? 0 : this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
         canvas.width -= w;
       } else {
@@ -1137,9 +1136,6 @@ define('containers/Sidebar',[
     _onMouseUp: function () {
       this.isDragging = false;
     },
-    setCallbackOnResize: function (callbackResize) {
-      this.callbackResize = callbackResize;
-    },
     addMenu: function (name) {
       var folder = new Folder(name);
       this.domSidebar.appendChild(folder.domUl);
@@ -1147,6 +1143,7 @@ define('containers/Sidebar',[
     },
     setVisibility: function (visible) {
       this.domSidebar.hidden = !visible;
+      this.domResize.hidden = !visible;
       this.callbackResize();
     }
   };
@@ -1352,8 +1349,7 @@ define('containers/Topbar',[
 
   Topbar.prototype = {
     _updateCanvasPosition: function (canvas) {
-      if (this.domTopbar.hidden) return;
-      var h = this.domTopbar.offsetHeight;
+      var h = this.domTopbar.hidden ? 0 : this.domTopbar.offsetHeight;
       canvas.style.top = h + 'px';
       canvas.height -= h;
     },
@@ -1435,6 +1431,7 @@ define('GuiMain',[
         if (this.topbar)
           this.topbar._updateCanvasPosition(this.domCanvas);
       }
+      this._updateSidebarsPosition();
       if (this.callbackResize)
         this.callbackResize();
     },
