@@ -18,8 +18,7 @@ define([
 
   Topbar.prototype = {
     _updateCanvasPosition: function (canvas) {
-      if (this.domTopbar.hidden) return;
-      var h = this.domTopbar.offsetHeight;
+      var h = this.domTopbar.hidden ? 0 : this.domTopbar.offsetHeight;
       canvas.style.top = h + 'px';
       canvas.height -= h;
     },

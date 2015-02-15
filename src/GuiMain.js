@@ -38,6 +38,7 @@ define([
         if (this.topbar)
           this.topbar._updateCanvasPosition(this.domCanvas);
       }
+      this._updateSidebarsPosition();
       if (this.callbackResize)
         this.callbackResize();
     },

@@ -40,8 +40,7 @@ define([
       this.mouseX = ev.clientX;
     },
     _updateCanvasPosition: function (canvas) {
-      if (this.domSidebar.hidden) return;
-      var w = this.domSidebar.offsetWidth;
+      var w = this.domSidebar.hidden ? 0 : this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
         canvas.width -= w;
       } else {
@@ -67,9 +66,6 @@ define([
     _onMouseUp: function () {
       this.isDragging = false;
     },
-    setCallbackOnResize: function (callbackResize) {
-      this.callbackResize = callbackResize;
-    },
     addMenu: function (name) {
       var folder = new Folder(name);
       this.domSidebar.appendChild(folder.domUl);
@@ -77,6 +73,7 @@ define([
     },
     setVisibility: function (visible) {
       this.domSidebar.hidden = !visible;
+      this.domResize.hidden = !visible;
       this.callbackResize();
     }
   };
