@@ -34,7 +34,7 @@ define([
     setVisibility: function (visible) {
       if (!visible)
         this.close();
-      this.domUl.style.height = visible ? '35px' : '0px';
+      this.domUl.style.height = visible ? 'auto' : '0px';
     }
   };
 
