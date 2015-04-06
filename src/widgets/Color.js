@@ -6,6 +6,7 @@ define([
   'use strict';
 
   var vendors = ['-moz-', '-o-', '-webkit-', '-ms-', ''];
+  var urlAlpha = 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAChJREFUeNpiPHPmDAMMGBsbw9lMDDgA6RKM%2F%2F%2F%2Fh3POnj1LCzsAAgwAQtYIcFfEyzkAAAAASUVORK5CYII%3D")';
 
   var Color = function (valOrObject, callbackOrKey) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
@@ -52,8 +53,25 @@ define([
     window.addEventListener('mouseout', this._onMouseUp.bind(this));
     window.addEventListener('mousemove', this._onMouseMove.bind(this));
 
-    this.editHue = this.editSaturation = false;
-    this.saturationWidth = this.saturationHeight = this.hueHeight = 100;
+    // alpha picker
+    this.hasAlpha = value.length === 4;
+    this.alpha = 1.0;
+    if (this.hasAlpha) {
+      this.domPopup.style.width = '142px';
+      this.domAlpha = document.createElement('div');
+      this.domAlpha.className = 'gui-color-alpha';
+      this.domAlphaKnob = document.createElement('div');
+      this.domAlphaKnob.className = 'gui-knob-alpha';
+
+      this._alphaGradient(this.domAlpha, 'top', 'rgba(0,0,0,1.0)', 'rgba(0,0,0,0.0)');
+
+      this.domAlpha.addEventListener('mousedown', this._onAlphaDown.bind(this));
+      this.domAlpha.appendChild(this.domAlphaKnob);
+      this.domPopup.appendChild(this.domAlpha);
+    }
+
+    this.editHue = this.editSaturation = this.editAlpha = false;
+    this.widgetHeight = this.widgetWidth = 100;
     this.setValue(value);
     this.setCallback(callback);
   };
@@ -70,28 +88,42 @@ define([
       hsv[1] = Math.min(1.0, Math.max(0.0, (ev.clientX - rect.left) / rect.width));
       hsv[2] = Math.min(1.0, Math.max(0.0, 1.0 - (ev.clientY - rect.top) / rect.width));
       this.setValue(GuiUtils.hsvToRgb(hsv), false, true);
-      this._onSaturationEdit(hsv);
+      this._updateGui();
     },
     _onUpdateHue: function (ev) {
       var rect = this.domHue.getBoundingClientRect();
       var hsv = GuiUtils.rgbToHsv(this.getValue());
       hsv[0] = Math.min(1.0, Math.max(0.0, 1.0 - (ev.clientY - rect.top) / rect.height));
       this.setValue(GuiUtils.hsvToRgb(hsv), false, true);
-      this._onHueEdit(hsv);
+      this._updateGui();
     },
-    _onSaturationEdit: function (hsv) {
-      this.domSaturationKnob.style.marginLeft = this.saturationWidth * hsv[1] - 7 + 'px';
-      this.domSaturationKnob.style.marginTop = this.saturationHeight * (1.0 - hsv[2]) - 7 + 'px';
+    _onUpdateAlpha: function (ev) {
+      var rect = this.domAlpha.getBoundingClientRect();
+      var col = this.getValue();
+      col[3] = this.alpha = Math.min(1.0, Math.max(0.0, 1.0 - (ev.clientY - rect.top) / rect.height));
+      this.setValue(col, false, true);
+      this._updateGui();
     },
-    _onHueEdit: function (hsv) {
+    _updateGui: function () {
+      var color = this.getValue();
+      var hsv = GuiUtils.rgbToHsv(color);
+
+      this.domSaturationKnob.style.marginLeft = this.widgetWidth * hsv[1] - 7 + 'px';
+      this.domSaturationKnob.style.marginTop = this.widgetHeight * (1.0 - hsv[2]) - 7 + 'px';
+
       hsv[1] = hsv[2] = 1.0;
       this._linearGradient(this.domSaturation, 'left', '#fff', GuiUtils.getStrColor(GuiUtils.hsvToRgb(hsv)));
-      this.domHueKnob.style.marginTop = (1.0 - hsv[0]) * this.hueHeight + 'px';
+
+      this.domHueKnob.style.marginTop = (1.0 - hsv[0]) * this.widgetHeight + 'px';
+
+      if (this.hasAlpha && color[3] !== undefined)
+        this.domAlphaKnob.style.marginTop = (1.0 - this.alpha) * this.widgetHeight + 'px';
     },
     _onMouseMove: function (ev) {
-      if (!this.editSaturation && !this.editHue) return;
+      if (!this.editSaturation && !this.editHue && !this.editAlpha) return;
       if (this.editSaturation) return this._onUpdateSaturation(ev);
-      else return this._onUpdateHue(ev);
+      if (this.editHue) return this._onUpdateHue(ev);
+      if (this.editAlpha) return this._onUpdateAlpha(ev);
     },
     _onSaturationDown: function (ev) {
       this.editSaturation = true;
@@ -101,13 +133,22 @@ define([
       this.editHue = true;
       this._onMouseMove(ev);
     },
+    _onAlphaDown: function (ev) {
+      this.editAlpha = true;
+      this._onMouseMove(ev);
+    },
     _onMouseUp: function () {
-      this.editHue = this.editSaturation = false;
+      this.editHue = this.editSaturation = this.editAlpha = false;
     },
     _hueGradient: function (dom) {
       dom.style.background = '';
       for (var i = 0, l = vendors.length; i < l; ++i)
         dom.style.cssText += 'background: ' + vendors[i] + 'linear-gradient(top,  #ff0000 0%, #ff00ff 17%, #0000ff 34%, #00ffff 50%, #00ff00 67%, #ffff00 84%, #ff0000 100%);';
+    },
+    _alphaGradient: function (dom, dir, col1, col2) {
+      dom.style.background = '';
+      for (var i = 0, l = vendors.length; i < l; ++i)
+        dom.style.cssText += 'background: ' + vendors[i] + 'linear-gradient(' + dir + ', ' + col1 + ',' + col2 + '),' + urlAlpha + ';';
     },
     _linearGradient: function (dom, dir, col1, col2) {
       dom.style.background = '';
@@ -116,18 +157,28 @@ define([
     },
     setValue: function (color, ignoreCB, ignoreUI) {
       var hex = GuiUtils.rgbToHex(color);
-      this.domInputColor.value = this.domInputColor.style.background = hex;
+      this.domInputColor.value = hex;
+      if (this.hasAlpha) {
+        if (color.length >= 4) this.alpha = color[3];
+        else color.push(this.alpha);
+        var col = 'rgba(' + parseInt(color[0] * 255, 10) + ',' + parseInt(color[1] * 255, 10) + ',' + parseInt(color[2] * 255, 10) + ',' + this.alpha + ')';
+        this._alphaGradient(this.domInputColor, '0deg', col, col);
+      } else {
+        this.domInputColor.style.background = hex;
+      }
+
       // color of text
       var hsv = GuiUtils.rgbToHsv(color);
-      this.domInputColor.style.color = this.domSaturationKnob.style.borderColor = (hsv[2] < 0.5 || hsv[1] > 0.5) ? '#fff' : '#000';
-      if (!ignoreUI) {
-        this._onSaturationEdit(hsv);
-        this._onHueEdit(hsv);
-      }
+      this.domSaturationKnob.style.borderColor = (hsv[2] < 0.5 || hsv[1] > 0.5) ? '#fff' : '#000';
+      this.domInputColor.style.color = (this.alpha > 0.2 && (hsv[2] < 0.5 || hsv[1] > 0.5)) ? '#fff' : '#000';
+      if (!ignoreUI) this._updateGui();
       if (!ignoreCB && this.callback) this.callback(color);
     },
     getValue: function () {
-      return GuiUtils.hexToRgb(this.domInputColor.value);
+      var col = GuiUtils.hexToRgb(this.domInputColor.value);
+      if (this.hasAlpha)
+        col.push(this.alpha);
+      return col;
     }
   };
 

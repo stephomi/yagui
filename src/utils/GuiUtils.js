@@ -43,7 +43,7 @@ define([], function () {
     else return [v, p, q];
   };
   GuiUtils.getValidColor = function (color) {
-    for (var i = 0; i < 3; ++i) color[i] = Math.max(0.0, Math.min(1.0, color[i]));
+    for (var i = 0, len = color.length; i < len; ++i) color[i] = Math.max(0.0, Math.min(1.0, color[i]));
     return color;
   };
   GuiUtils.getStrColor = function (color) {
@@ -51,10 +51,14 @@ define([], function () {
     return 'rgba(' + Math.round(color[0] * 255) + ',' + Math.round(color[1] * 255) + ',' + Math.round(color[2] * 255) + ',' + color[3] + ')';
   };
   GuiUtils.getColorMult = function (color, fac) {
-    return GuiUtils.getValidColor([color[0] * fac, color[1] * fac, color[2] * fac]);
+    var out = [color[0] * fac, color[1] * fac, color[2] * fac];
+    if (color.length === 4) out.push(color[3]);
+    return GuiUtils.getValidColor(out);
   };
   GuiUtils.getColorAdd = function (color, add) {
-    return GuiUtils.getValidColor([color[0] + add, color[1] + add, color[2] + add]);
+    var out = [color[0] + add, color[1] + add, color[2] + add];
+    if (color.length === 4) out.push(color[3]);
+    return GuiUtils.getValidColor(out);
   };
   GuiUtils.rgbToHex = function (rgb) {
     var h = '#';

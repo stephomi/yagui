@@ -91,6 +91,7 @@ define([
   EditStyle.changeOverallColor = function (color) {
     EditStyle.changeWidgetsColor(color);
     var bgCol = GuiUtils.getColorMult(color, 0.5);
+    bgCol.length = 3;
     EditStyle.changeBackgroundColor(bgCol);
 
     var texCol = GuiUtils.getColorAdd(color, 0.5);
@@ -103,11 +104,11 @@ define([
   };
 
   // init value
-  EditStyle._curTextColor = [0.73, 0.73, 0.73];
-  EditStyle._curWidgetColor = [0.32, 0.37, 0.39];
+  EditStyle._curTextColor = [0.73, 0.73, 0.73, 1.0];
+  EditStyle._curWidgetColor = [0.32, 0.37, 0.39, 1.0];
   EditStyle._curBackgroundColor = [0.24, 0.24, 0.24];
   EditStyle._curShowBorder = false;
 
-  EditStyle.changeOverallColor([0.3, 0.34, 0.4]);
+  EditStyle.changeOverallColor([0.3, 0.34, 0.4, 1.0]);
   return EditStyle;
 });
