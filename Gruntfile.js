@@ -50,23 +50,35 @@ module.exports = function (grunt) {
     }
   };
 
+  var watch = {
+    src: {
+      files: [
+        'src/**/*.js',
+        'css/*'
+      ],
+      tasks: ['buildsources']
+    }
+  };
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    clean: clean,
+    requirejs: requirejs,
     jshint: jshint,
+    clean: clean,
     copy: copy,
-    requirejsmin: requirejs,
-    requirejs: requirejs
+    watch: watch
   });
 
   grunt.loadNpmTasks('grunt-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('test', 'jshint');
-  grunt.registerTask('build', ['clean', 'jshint', 'copy', 'requirejs:debug', 'requirejs:min']);
+  grunt.registerTask('buildsources', ['copy', 'requirejs:debug', 'requirejs:min']);
+  grunt.registerTask('build', ['clean', 'jshint', 'buildsources']);
 
   grunt.registerTask('default', 'build');
 };

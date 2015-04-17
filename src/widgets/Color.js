@@ -11,8 +11,8 @@ define([
   var Color = function (valOrObject, callbackOrKey) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
     var callback = this._getCheckCallback(valOrObject, callbackOrKey);
-    if (value) value = GuiUtils.getValidColor(value);
-    else value = [1.0, 0.0, 0.0];
+    if (value) this.color = GuiUtils.getValidColor(value.slice());
+    else this.color = [1.0, 0.0, 0.0];
 
     // container
     this.domColor = document.createElement('div');
@@ -54,7 +54,7 @@ define([
     window.addEventListener('mousemove', this._onMouseMove.bind(this));
 
     // alpha picker
-    this.hasAlpha = value.length === 4;
+    this.hasAlpha = this.color.length === 4;
     this.alpha = 1.0;
     if (this.hasAlpha) {
       this.domPopup.style.width = '142px';
@@ -72,7 +72,7 @@ define([
 
     this.editHue = this.editSaturation = this.editAlpha = false;
     this.widgetHeight = this.widgetWidth = 100;
-    this.setValue(value);
+    this.setValue(this.color);
     this.setCallback(callback);
   };
 
@@ -156,6 +156,10 @@ define([
         dom.style.cssText += 'background: ' + vendors[i] + 'linear-gradient(' + dir + ', ' + col1 + ' 0%, ' + col2 + ' 100%);';
     },
     setValue: function (color, ignoreCB, ignoreUI) {
+      var c = this.color;
+      for (var i = 0, nbC = color.length; i < nbC; ++i)
+        c[i] = color[i];
+
       var hex = GuiUtils.rgbToHex(color);
       this.domInputColor.value = hex;
       if (this.hasAlpha) {
@@ -175,10 +179,7 @@ define([
       if (!ignoreCB && this.callback) this.callback(color);
     },
     getValue: function () {
-      var col = GuiUtils.hexToRgb(this.domInputColor.value);
-      if (this.hasAlpha)
-        col.push(this.alpha);
-      return col;
+      return this.color;
     }
   };
 
