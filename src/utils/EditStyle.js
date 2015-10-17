@@ -1,8 +1,8 @@
-define([
-  'utils/GuiUtils'
-], function (GuiUtils) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
 
   var EditStyle = {};
 
@@ -110,5 +110,5 @@ define([
   EditStyle._curShowBorder = false;
 
   EditStyle.changeOverallColor([0.3, 0.34, 0.4, 1.0]);
-  return EditStyle;
+  module.exports = EditStyle;
 });

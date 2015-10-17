@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'widgets/BaseWidget'
-], function (GuiUtils, BaseWidget) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseWidget = require('widgets/BaseWidget');
 
   var Slider = function (valOrObject, callbackOrKey, min, max, step) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
@@ -94,5 +94,5 @@ define([
 
   GuiUtils.makeProxy(BaseWidget, Slider);
 
-  return Slider;
+  module.exports = Slider;
 });

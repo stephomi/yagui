@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'widgets/BaseWidget'
-], function (GuiUtils, BaseWidget) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseWidget = require('widgets/BaseWidget');
 
   var Combobox = function (valOrObject, callbackOrKey, options) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
@@ -44,5 +44,5 @@ define([
 
   GuiUtils.makeProxy(BaseWidget, Combobox);
 
-  return Combobox;
+  module.exports = Combobox;
 });

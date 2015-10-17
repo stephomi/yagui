@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'widgets/BaseWidget'
-], function (GuiUtils, BaseWidget) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseWidget = require('widgets/BaseWidget');
 
   var Title = function (name) {
     this.domText = document.createElement('div');
@@ -22,5 +22,5 @@ define([
 
   GuiUtils.makeProxy(BaseWidget, Title);
 
-  return Title;
+  module.exports = Title;
 });

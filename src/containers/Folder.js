@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'containers/BaseContainer'
-], function (GuiUtils, BaseContainer) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseContainer = require('containers/BaseContainer');
 
   var Folder = function (name) {
     this.domUl = document.createElement('ul');
@@ -40,5 +40,5 @@ define([
 
   GuiUtils.makeProxy(BaseContainer, Folder);
 
-  return Folder;
+  module.exports = Folder;
 });

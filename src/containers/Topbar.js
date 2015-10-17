@@ -1,9 +1,9 @@
-define([
-  'containers/Menu',
-  'utils/EditStyle'
-], function (Menu, EditStyle) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var Menu = require('containers/Menu');
+  var EditStyle = require('utils/EditStyle');
 
   var Topbar = function (callbackResize) {
     this.domTopbar = document.createElement('div');
@@ -58,5 +58,5 @@ define([
     }
   };
 
-  return Topbar;
+  module.exports = Topbar;
 });

@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'widgets/BaseWidget'
-], function (GuiUtils, BaseWidget) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseWidget = require('widgets/BaseWidget');
 
   var vendors = ['-moz-', '-o-', '-webkit-', '-ms-', ''];
   var urlAlpha = 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAChJREFUeNpiPHPmDAMMGBsbw9lMDDgA6RKM%2F%2F%2F%2Fh3POnj1LCzsAAgwAQtYIcFfEyzkAAAAASUVORK5CYII%3D")';
@@ -185,5 +185,5 @@ define([
 
   GuiUtils.makeProxy(BaseWidget, Color);
 
-  return Color;
+  module.exports = Color;
 });

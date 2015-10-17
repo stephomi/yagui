@@ -1,4 +1,4 @@
-define([], function () {
+define(function (require, exports, module) {
 
   'use strict';
 
@@ -27,5 +27,5 @@ define([], function () {
     }
   };
 
-  return BaseWidget;
+  module.exports = BaseWidget;
 });

@@ -1,9 +1,9 @@
-define([
-  'utils/GuiUtils',
-  'widgets/BaseWidget'
-], function (GuiUtils, BaseWidget) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseWidget = require('widgets/BaseWidget');
 
   var MenuButton = function (callbackOrObject, shortcutOrKey, shortcut) {
     var callback = callbackOrObject;
@@ -29,5 +29,5 @@ define([
 
   GuiUtils.makeProxy(BaseWidget, MenuButton);
 
-  return MenuButton;
+  module.exports = MenuButton;
 });

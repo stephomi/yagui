@@ -1,9 +1,9 @@
-define([
-  'containers/Sidebar',
-  'containers/Topbar'
-], function (Sidebar, Topbar) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var Sidebar = require('containers/Sidebar');
+  var Topbar = require('containers/Topbar');
 
   var GuiMain = function (canvas, callbackResize) {
     this.domMain = document.createElement('div');
@@ -85,5 +85,5 @@ define([
     }
   };
 
-  return GuiMain;
+  module.exports = GuiMain;
 });

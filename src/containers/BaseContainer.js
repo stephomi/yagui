@@ -1,14 +1,13 @@
-define([
-  'widgets/BaseWidget',
-  'widgets/Button',
-  'widgets/Checkbox',
-  'widgets/Color',
-  'widgets/Combobox',
-  'widgets/Slider',
-  'widgets/Title'
-], function (BaseWidget, Button, Checkbox, Color, Combobox, Slider, Title) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var Button = require('widgets/Button');
+  var Checkbox = require('widgets/Checkbox');
+  var Color = require('widgets/Color');
+  var Combobox = require('widgets/Combobox');
+  var Slider = require('widgets/Slider');
+  var Title = require('widgets/Title');
 
   var BaseContainer = function () {};
 
@@ -105,5 +104,5 @@ define([
     }
   };
 
-  return BaseContainer;
+  module.exports = BaseContainer;
 });

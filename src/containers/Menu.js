@@ -1,10 +1,10 @@
-define([
-  'utils/GuiUtils',
-  'containers/BaseContainer',
-  'widgets/MenuButton'
-], function (GuiUtils, BaseContainer, MenuButton) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var GuiUtils = require('utils/GuiUtils');
+  var BaseContainer = require('containers/BaseContainer');
+  var MenuButton = require('widgets/MenuButton');
 
   var Menu = function () {
     this.domUl = document.createElement('ul');
@@ -29,5 +29,5 @@ define([
 
   GuiUtils.makeProxy(BaseContainer, Menu);
 
-  return Menu;
+  module.exports = Menu;
 });

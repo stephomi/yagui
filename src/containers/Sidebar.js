@@ -1,8 +1,8 @@
-define([
-  'containers/Folder'
-], function (Folder) {
+define(function (require, exports, module) {
 
   'use strict';
+
+  var Folder = require('containers/Folder');
 
   var Sidebar = function (callbackResize) {
     this.domSidebar = document.createElement('div');
@@ -78,5 +78,5 @@ define([
     }
   };
 
-  return Sidebar;
+  module.exports = Sidebar;
 });
