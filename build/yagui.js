@@ -1164,13 +1164,13 @@ define('containers/Sidebar',['require','exports','module','containers/Folder'],f
       this.isDragging = true;
       this.mouseX = ev.clientX;
     },
-    _updateCanvasPosition: function (canvas) {
+    _updateViewportPosition: function (viewport) {
       var w = this.domSidebar.hidden ? 0 : this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
-        canvas.width -= w;
+        viewport.style.width = (viewport.clientWidth - w) + 'px';
       } else {
-        canvas.style.left = this.domSidebar.offsetLeft + w + 'px';
-        canvas.width -= w;
+        viewport.style.left = (this.domSidebar.offsetLeft + w) + 'px';
+        viewport.style.width = (viewport.clientWidth - w) + 'px';
       }
     },
     _onMouseMove: function (ev) {
@@ -1404,10 +1404,10 @@ define('containers/Topbar',['require','exports','module','containers/Menu','util
   };
 
   Topbar.prototype = {
-    _updateCanvasPosition: function (canvas) {
+    _updateViewportPosition: function (viewport) {
       var h = this.domTopbar.hidden ? 0 : this.domTopbar.offsetHeight;
-      canvas.style.top = h + 'px';
-      canvas.height -= h;
+      viewport.style.top = h + 'px';
+      viewport.style.height = (viewport.clientHeight - h) + 'px';
     },
     _onChangeColor: function (callback, color) {
       callback(color);
@@ -1454,14 +1454,14 @@ define('GuiMain',['require','exports','module','containers/Sidebar','containers/
   var Sidebar = require('containers/Sidebar');
   var Topbar = require('containers/Topbar');
 
-  var GuiMain = function (canvas, callbackResize) {
+  var GuiMain = function (viewport, callbackResize) {
     this.domMain = document.createElement('div');
-    this.domCanvas = canvas;
+    this.viewport = viewport;
 
     this.callbackResize = callbackResize;
-    if (this.domCanvas) {
-      this.domCanvas.width = window.innerWidth;
-      this.domCanvas.height = window.innerHeight;
+    if (this.viewport) {
+      this.viewport.style.width = document.documentElement.clientWidth + 'px';
+      this.viewport.style.height = document.documentElement.clientHeight + 'px';
     }
     this.cbResize_ = this._onWindowResize.bind(this);
 
@@ -1475,17 +1475,17 @@ define('GuiMain',['require','exports','module','containers/Sidebar','containers/
 
   GuiMain.prototype = {
     _onWindowResize: function () {
-      if (this.domCanvas) {
-        this.domCanvas.width = window.innerWidth;
-        this.domCanvas.height = window.innerHeight;
-        this.domCanvas.left = 0;
-        this.domCanvas.top = 0;
+      if (this.viewport) {
+        this.viewport.style.width = document.documentElement.clientWidth + 'px';
+        this.viewport.style.height = document.documentElement.clientHeight + 'px';
+        this.viewport.style.left = '0px';
+        this.viewport.style.top = '0px';
         if (this.leftSidebar)
-          this.leftSidebar._updateCanvasPosition(this.domCanvas);
+          this.leftSidebar._updateViewportPosition(this.viewport);
         if (this.rightSidebar)
-          this.rightSidebar._updateCanvasPosition(this.domCanvas);
+          this.rightSidebar._updateViewportPosition(this.viewport);
         if (this.topbar)
-          this.topbar._updateCanvasPosition(this.domCanvas);
+          this.topbar._updateViewportPosition(this.viewport);
       }
       this._updateSidebarsPosition();
       if (this.callbackResize)
@@ -1506,7 +1506,7 @@ define('GuiMain',['require','exports','module','containers/Sidebar','containers/
       this.domMain.appendChild(this.leftSidebar.domResize);
 
       this._updateSidebarsPosition();
-      this.leftSidebar._updateCanvasPosition(this.domCanvas);
+      this.leftSidebar._updateViewportPosition(this.viewport);
       return this.leftSidebar;
     },
     addRightSidebar: function () {
@@ -1517,7 +1517,7 @@ define('GuiMain',['require','exports','module','containers/Sidebar','containers/
 
       this.rightSidebar._onTheRight();
       this._updateSidebarsPosition();
-      this.rightSidebar._updateCanvasPosition(this.domCanvas);
+      this.rightSidebar._updateViewportPosition(this.viewport);
       return this.rightSidebar;
     },
     addTopbar: function () {
@@ -1525,7 +1525,7 @@ define('GuiMain',['require','exports','module','containers/Sidebar','containers/
       this.domMain.appendChild(this.topbar.domTopbar);
 
       this._updateSidebarsPosition();
-      this.topbar._updateCanvasPosition(this.domCanvas);
+      this.topbar._updateViewportPosition(this.viewport);
       return this.topbar;
     },
     setVisibility: function (visible) {

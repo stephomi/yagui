@@ -39,13 +39,13 @@ define(function (require, exports, module) {
       this.isDragging = true;
       this.mouseX = ev.clientX;
     },
-    _updateCanvasPosition: function (canvas) {
+    _updateViewportPosition: function (viewport) {
       var w = this.domSidebar.hidden ? 0 : this.domSidebar.offsetWidth;
       if (this.isOnTheRight) {
-        canvas.width -= w;
+        viewport.style.width = (viewport.clientWidth - w) + 'px';
       } else {
-        canvas.style.left = this.domSidebar.offsetLeft + w + 'px';
-        canvas.width -= w;
+        viewport.style.left = (this.domSidebar.offsetLeft + w) + 'px';
+        viewport.style.width = (viewport.clientWidth - w) + 'px';
       }
     },
     _onMouseMove: function (ev) {

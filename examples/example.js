@@ -5,9 +5,10 @@
 //         or
 // [name, object, key]
 
-var canvas = document.getElementById('canvas'); // optional
+var viewport = document.getElementById('viewport'); // optional
 
 ///// example callback - compute gradient on a canvas
+var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var computeGradient = function (color) {
   color = window.lastColor = color || window.lastColor;
@@ -23,7 +24,7 @@ var computeGradient = function (color) {
 };
 var cbResizeCanvas = computeGradient; // optional
 
-var main = new window.yagui.GuiMain(canvas, cbResizeCanvas); // main gui
+var main = new window.yagui.GuiMain(viewport, cbResizeCanvas); // main gui
 
 //////// TOP BAR /////////
 var topbar = main.addTopbar(); // top bar

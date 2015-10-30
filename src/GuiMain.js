@@ -5,14 +5,14 @@ define(function (require, exports, module) {
   var Sidebar = require('containers/Sidebar');
   var Topbar = require('containers/Topbar');
 
-  var GuiMain = function (canvas, callbackResize) {
+  var GuiMain = function (viewport, callbackResize) {
     this.domMain = document.createElement('div');
-    this.domCanvas = canvas;
+    this.viewport = viewport;
 
     this.callbackResize = callbackResize;
-    if (this.domCanvas) {
-      this.domCanvas.width = window.innerWidth;
-      this.domCanvas.height = window.innerHeight;
+    if (this.viewport) {
+      this.viewport.style.width = document.documentElement.clientWidth + 'px';
+      this.viewport.style.height = document.documentElement.clientHeight + 'px';
     }
     this.cbResize_ = this._onWindowResize.bind(this);
 
@@ -26,17 +26,17 @@ define(function (require, exports, module) {
 
   GuiMain.prototype = {
     _onWindowResize: function () {
-      if (this.domCanvas) {
-        this.domCanvas.width = window.innerWidth;
-        this.domCanvas.height = window.innerHeight;
-        this.domCanvas.left = 0;
-        this.domCanvas.top = 0;
+      if (this.viewport) {
+        this.viewport.style.width = document.documentElement.clientWidth + 'px';
+        this.viewport.style.height = document.documentElement.clientHeight + 'px';
+        this.viewport.style.left = '0px';
+        this.viewport.style.top = '0px';
         if (this.leftSidebar)
-          this.leftSidebar._updateCanvasPosition(this.domCanvas);
+          this.leftSidebar._updateViewportPosition(this.viewport);
         if (this.rightSidebar)
-          this.rightSidebar._updateCanvasPosition(this.domCanvas);
+          this.rightSidebar._updateViewportPosition(this.viewport);
         if (this.topbar)
-          this.topbar._updateCanvasPosition(this.domCanvas);
+          this.topbar._updateViewportPosition(this.viewport);
       }
       this._updateSidebarsPosition();
       if (this.callbackResize)
@@ -57,7 +57,7 @@ define(function (require, exports, module) {
       this.domMain.appendChild(this.leftSidebar.domResize);
 
       this._updateSidebarsPosition();
-      this.leftSidebar._updateCanvasPosition(this.domCanvas);
+      this.leftSidebar._updateViewportPosition(this.viewport);
       return this.leftSidebar;
     },
     addRightSidebar: function () {
@@ -68,7 +68,7 @@ define(function (require, exports, module) {
 
       this.rightSidebar._onTheRight();
       this._updateSidebarsPosition();
-      this.rightSidebar._updateCanvasPosition(this.domCanvas);
+      this.rightSidebar._updateViewportPosition(this.viewport);
       return this.rightSidebar;
     },
     addTopbar: function () {
@@ -76,7 +76,7 @@ define(function (require, exports, module) {
       this.domMain.appendChild(this.topbar.domTopbar);
 
       this._updateSidebarsPosition();
-      this.topbar._updateCanvasPosition(this.domCanvas);
+      this.topbar._updateViewportPosition(this.viewport);
       return this.topbar;
     },
     setVisibility: function (visible) {

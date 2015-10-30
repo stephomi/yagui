@@ -17,10 +17,10 @@ define(function (require, exports, module) {
   };
 
   Topbar.prototype = {
-    _updateCanvasPosition: function (canvas) {
+    _updateViewportPosition: function (viewport) {
       var h = this.domTopbar.hidden ? 0 : this.domTopbar.offsetHeight;
-      canvas.style.top = h + 'px';
-      canvas.height -= h;
+      viewport.style.top = h + 'px';
+      viewport.style.height = (viewport.clientHeight - h) + 'px';
     },
     _onChangeColor: function (callback, color) {
       callback(color);
