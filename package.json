@@ -10,6 +10,7 @@
     "grunt-contrib-requirejs": "^0.4.4"
   },
   "devDependencies": {
+    "grunt-jsbeautifier": "^0.2.10",
     "grunt-contrib-watch": "^0.6.1"
   },
   "scripts": {

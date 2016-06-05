@@ -1,3 +1,4 @@
+/* globals module */
 module.exports = function (grunt) {
   'use strict';
 
@@ -60,6 +61,13 @@ module.exports = function (grunt) {
     }
   };
 
+  var jsbeautifier = {
+    src: ['Gruntfile.js', 'src/**/*.js'],
+    options: {
+      config: './.jsbeautifyrc'
+    }
+  };
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -67,16 +75,23 @@ module.exports = function (grunt) {
     jshint: jshint,
     clean: clean,
     copy: copy,
-    watch: watch
+    watch: watch,
+    jsbeautifier: jsbeautifier
   });
 
   grunt.loadNpmTasks('grunt-requirejs');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
+  // test
   grunt.registerTask('test', 'jshint');
+
+  // beautify
+  grunt.registerTask('beautify', ['jsbeautifier']);
+
   grunt.registerTask('buildsources', ['copy', 'requirejs:debug', 'requirejs:min']);
   grunt.registerTask('build', ['clean', 'jshint', 'buildsources']);
 

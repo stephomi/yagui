@@ -9,7 +9,9 @@ define(function (require, exports, module) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
     var callback = this._getCheckCallback(valOrObject, callbackOrKey);
     options = options || {};
-    value = value || options[0];
+    value = value !== undefined ? value : options[0];
+
+    this.isArray = options.length !== undefined;
 
     this.domSelect = document.createElement('select');
     this.domSelect.className = 'gui-select';
@@ -21,6 +23,9 @@ define(function (require, exports, module) {
   };
 
   Combobox.prototype = {
+    _parseValue: function (val) {
+      return this.isArray ? parseInt(val, 10) : val;
+    },
     _onChange: function (ev) {
       this.setValue(ev.target.value);
     },
@@ -35,10 +40,10 @@ define(function (require, exports, module) {
     },
     setValue: function (val, ignoreCB) {
       this.domSelect.value = val;
-      if (!ignoreCB && this.callback) this.callback(val);
+      if (!ignoreCB && this.callback) this.callback(this._parseValue(val));
     },
     getValue: function () {
-      return this.domSelect.value;
+      return this._parseValue(this.domSelect.value);
     }
   };
 
