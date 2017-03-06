@@ -1,11 +1,10 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class Slider extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(valOrObject, callbackOrKey, min, max, step) {
+    super();
 
-  var Slider = function (valOrObject, callbackOrKey, min, max, step) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
     var callback = this._getCheckCallback(valOrObject, callbackOrKey);
     value = value !== undefined ? value : 100;
@@ -38,61 +37,66 @@ define(function (require, exports, module) {
     this.isDown = false;
     this.setValue(value);
     this.setCallback(callback);
-  };
+  }
 
-  Slider.prototype = {
-    _onInputText: function (ev) {
-      var val = parseFloat(ev.target.value);
-      if (val !== val || val === this.lastValue) return;
-      this.setValue(val);
-    },
-    _onKeyDown: function (ev) {
-      ev.stopPropagation();
-      if (ev.which === 13) // enter
-        this.domInputText.blur();
-    },
-    _onMouseMove: function (ev) {
-      ev.preventDefault();
-      if (!this.isDown)
-        return;
-      var rect = this.domSlider.getBoundingClientRect();
-      var val = this.min + (this.max - this.min) * ((ev.clientX - rect.left) / rect.width);
-      this.setValue(val);
-    },
-    _onMouseDown: function (ev) {
-      this.isDown = true;
-      this._onMouseMove(ev);
-    },
-    _onMouseUp: function () {
-      this.isDown = false;
-    },
-    _setDomContainer: function (container) {
-      this.domContainer = container;
-    },
-    getValue: function () {
-      return parseFloat(this.domInputText.value);
-    },
-    setValue: function (val, ignoreCB) {
-      this.lastValue = val;
-      val = Math.max(Math.min(val, this.max), this.min);
-      val = Math.round(val / this.step) * this.step;
-      this.domInputText.value = val;
-      var per = this.min;
-      if (this.max !== this.min) per = (val - this.min) / (this.max - this.min);
-      this.domSliderFill.style.width = 100 * per + '%';
-      if (!ignoreCB && this.callback) this.callback(val);
-    },
-    setMax: function (max) {
-      this.domInputText.max = this.max = max;
-      return this;
-    },
-    setMin: function (min) {
-      this.min = min;
-      return this;
-    }
-  };
+  _onInputText(ev) {
+    var val = parseFloat(ev.target.value);
+    if (val !== val || val === this.lastValue) return;
+    this.setValue(val);
+  }
 
-  GuiUtils.makeProxy(BaseWidget, Slider);
+  _onKeyDown(ev) {
+    ev.stopPropagation();
+    if (ev.which === 13) // enter
+      this.domInputText.blur();
+  }
 
-  module.exports = Slider;
-});
+  _onMouseMove(ev) {
+    ev.preventDefault();
+    if (!this.isDown)
+      return;
+    var rect = this.domSlider.getBoundingClientRect();
+    var val = this.min + (this.max - this.min) * ((ev.clientX - rect.left) / rect.width);
+    this.setValue(val);
+  }
+
+  _onMouseDown(ev) {
+    this.isDown = true;
+    this._onMouseMove(ev);
+  }
+
+  _onMouseUp() {
+    this.isDown = false;
+  }
+
+  _setDomContainer(container) {
+    this.domContainer = container;
+  }
+
+  getValue() {
+    return parseFloat(this.domInputText.value);
+  }
+
+  setValue(val, ignoreCB) {
+    this.lastValue = val;
+    val = Math.max(Math.min(val, this.max), this.min);
+    val = Math.round(val / this.step) * this.step;
+    this.domInputText.value = val;
+    var per = this.min;
+    if (this.max !== this.min) per = (val - this.min) / (this.max - this.min);
+    this.domSliderFill.style.width = 100 * per + '%';
+    if (!ignoreCB && this.callback) this.callback(val);
+  }
+
+  setMax(max) {
+    this.domInputText.max = this.max = max;
+    return this;
+  }
+
+  setMin(min) {
+    this.min = min;
+    return this;
+  }
+}
+
+export default Slider;

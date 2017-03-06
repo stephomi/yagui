@@ -1,11 +1,10 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class MenuButton extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(callbackOrObject, shortcutOrKey, shortcut) {
+    super();
 
-  var MenuButton = function (callbackOrObject, shortcutOrKey, shortcut) {
     var callback = callbackOrObject;
     if (callback && typeof callback !== 'function') callback = callbackOrObject[shortcutOrKey].bind(callbackOrObject);
     else shortcut = shortcutOrKey;
@@ -15,19 +14,16 @@ define(function (require, exports, module) {
     this.domSpan.innerHTML = shortcut || '';
 
     this.setCallback(callback);
-  };
+  }
 
-  MenuButton.prototype = {
-    _setDomContainer: function (container) {
-      this.domContainer = container;
-      container.addEventListener('click', this._onClick.bind(this));
-    },
-    _onClick: function () {
-      if (this.callback) this.callback();
-    }
-  };
+  _setDomContainer(container) {
+    this.domContainer = container;
+    container.addEventListener('click', this._onClick.bind(this));
+  }
 
-  GuiUtils.makeProxy(BaseWidget, MenuButton);
+  _onClick() {
+    if (this.callback) this.callback();
+  }
+}
 
-  module.exports = MenuButton;
-});
+export default MenuButton;

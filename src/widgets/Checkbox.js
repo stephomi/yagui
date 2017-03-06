@@ -1,11 +1,10 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class Checkbox extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(valOrObject, callbackOrKey) {
+    super();
 
-  var Checkbox = function (valOrObject, callbackOrKey) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
     var callback = this._getCheckCallback(valOrObject, callbackOrKey);
     this.domCheckbox = document.createElement('input');
@@ -16,22 +15,20 @@ define(function (require, exports, module) {
 
     this.setValue(value === undefined ? true : value);
     this.setCallback(callback);
-  };
+  }
 
-  Checkbox.prototype = {
-    _onMouseDown: function () {
-      this.setValue(!this.domCheckbox.checked);
-    },
-    setValue: function (val, ignoreCB) {
-      this.domCheckbox.checked = val;
-      if (!ignoreCB && this.callback) this.callback(val);
-    },
-    getValue: function () {
-      return this.domCheckbox.checked;
-    }
-  };
+  _onMouseDown() {
+    this.setValue(!this.domCheckbox.checked);
+  }
 
-  GuiUtils.makeProxy(BaseWidget, Checkbox);
+  setValue(val, ignoreCB) {
+    this.domCheckbox.checked = val;
+    if (!ignoreCB && this.callback) this.callback(val);
+  }
 
-  module.exports = Checkbox;
-});
+  getValue() {
+    return this.domCheckbox.checked;
+  }
+}
+
+export default Checkbox;

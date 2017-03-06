@@ -1,31 +1,31 @@
-define(function (require, exports, module) {
+class BaseWidget {
 
-  'use strict';
+  constructor() {}
 
-  var BaseWidget = function () {};
+  _getInitialValue(valOrObject, callbackOrKey) {
+    if (typeof callbackOrKey !== 'string') return valOrObject;
+    return valOrObject[callbackOrKey];
+  }
 
-  BaseWidget.prototype = {
-    _getInitialValue: function (valOrObject, callbackOrKey) {
-      if (typeof callbackOrKey !== 'string') return valOrObject;
-      return valOrObject[callbackOrKey];
-    },
-    _getCheckCallback: function (valOrObject, callbackOrKey) {
-      if (typeof callbackOrKey !== 'string') return callbackOrKey;
-      return function (val) {
-        valOrObject[callbackOrKey] = val;
-      };
-    },
-    _setDomContainer: function (container) {
-      this.domContainer = container;
-    },
-    setCallback: function (callback) {
-      this.callback = callback;
-    },
-    setVisibility: function (visible) {
-      if (!this.domContainer) return;
-      this.domContainer.hidden = !visible;
-    }
-  };
+  _getCheckCallback(valOrObject, callbackOrKey) {
+    if (typeof callbackOrKey !== 'string') return callbackOrKey;
+    return function (val) {
+      valOrObject[callbackOrKey] = val;
+    };
+  }
 
-  module.exports = BaseWidget;
-});
+  _setDomContainer(container) {
+    this.domContainer = container;
+  }
+
+  setCallback(callback) {
+    this.callback = callback;
+  }
+
+  setVisibility(visible) {
+    if (!this.domContainer) return;
+    this.domContainer.hidden = !visible;
+  }
+}
+
+export default BaseWidget;

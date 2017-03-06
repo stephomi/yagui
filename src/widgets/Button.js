@@ -1,11 +1,10 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class Button extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(name, callbackOrObject, key) {
+    super();
 
-  var Button = function (name, callbackOrObject, key) {
     var callback = key ? callbackOrObject[key].bind(callbackOrObject) : callbackOrObject;
 
     this.domButton = document.createElement('button');
@@ -14,18 +13,15 @@ define(function (require, exports, module) {
     this.domButton.addEventListener('click', this._onClick.bind(this));
 
     this.setCallback(callback);
-  };
+  }
 
-  Button.prototype = {
-    setEnable: function (bool) {
-      this.domButton.disabled = bool === undefined ? false : !bool;
-    },
-    _onClick: function () {
-      if (this.callback) this.callback();
-    }
-  };
+  setEnable(bool) {
+    this.domButton.disabled = bool === undefined ? false : !bool;
+  }
 
-  GuiUtils.makeProxy(BaseWidget, Button);
+  _onClick() {
+    if (this.callback) this.callback();
+  }
+}
 
-  module.exports = Button;
-});
+export default Button;

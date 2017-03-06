@@ -1,11 +1,10 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class Combobox extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(valOrObject, callbackOrKey, options) {
+    super();
 
-  var Combobox = function (valOrObject, callbackOrKey, options) {
     var value = this._getInitialValue(valOrObject, callbackOrKey);
     var callback = this._getCheckCallback(valOrObject, callbackOrKey);
     options = options || {};
@@ -20,34 +19,34 @@ define(function (require, exports, module) {
     this.domSelect.addEventListener('change', this._onChange.bind(this));
     this.setValue(value);
     this.setCallback(callback);
-  };
+  }
 
-  Combobox.prototype = {
-    _parseValue: function (val) {
-      return this.isArray ? parseInt(val, 10) : val;
-    },
-    _onChange: function (ev) {
-      this.setValue(ev.target.value);
-    },
-    addOptions: function (options) {
-      var keys = Object.keys(options);
-      for (var i = 0; i < keys.length; ++i) {
-        var opt = document.createElement('option');
-        opt.innerHTML = options[keys[i]];
-        opt.value = keys[i];
-        this.domSelect.appendChild(opt);
-      }
-    },
-    setValue: function (val, ignoreCB) {
-      this.domSelect.value = val;
-      if (!ignoreCB && this.callback) this.callback(this._parseValue(val));
-    },
-    getValue: function () {
-      return this._parseValue(this.domSelect.value);
+  _parseValue(val) {
+    return this.isArray ? parseInt(val, 10) : val;
+  }
+
+  _onChange(ev) {
+    this.setValue(ev.target.value);
+  }
+
+  addOptions(options) {
+    var keys = Object.keys(options);
+    for (var i = 0; i < keys.length; ++i) {
+      var opt = document.createElement('option');
+      opt.innerHTML = options[keys[i]];
+      opt.value = keys[i];
+      this.domSelect.appendChild(opt);
     }
-  };
+  }
 
-  GuiUtils.makeProxy(BaseWidget, Combobox);
+  setValue(val, ignoreCB) {
+    this.domSelect.value = val;
+    if (!ignoreCB && this.callback) this.callback(this._parseValue(val));
+  }
 
-  module.exports = Combobox;
-});
+  getValue() {
+    return this._parseValue(this.domSelect.value);
+  }
+}
+
+export default Combobox;

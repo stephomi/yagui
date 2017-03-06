@@ -1,12 +1,7 @@
-define(function (require, exports, module) {
+var GuiMain = require('GuiMain').default;
 
-  'use strict';
+var yagui = {
+  GuiMain: GuiMain
+};
 
-  var GuiMain = require('GuiMain');
-
-  var yagui = {};
-  yagui.GuiMain = GuiMain;
-  window.yagui = yagui;
-
-  module.exports = yagui;
-});
+module.exports = yagui;

@@ -1,26 +1,22 @@
-define(function (require, exports, module) {
+import BaseWidget from 'widgets/BaseWidget';
 
-  'use strict';
+class Title extends BaseWidget {
 
-  var GuiUtils = require('utils/GuiUtils');
-  var BaseWidget = require('widgets/BaseWidget');
+  constructor(name) {
+    super();
 
-  var Title = function (name) {
     this.domText = document.createElement('div');
     this.domText.innerHTML = name || '';
     this.domText.className = 'group-title';
-  };
+  }
 
-  Title.prototype = {
-    setText: function (text) {
-      this.domText.innerHTML = text;
-    },
-    setVisibility: function (visible) {
-      this.domText.hidden = !visible;
-    }
-  };
+  setText(text) {
+    this.domText.innerHTML = text;
+  }
 
-  GuiUtils.makeProxy(BaseWidget, Title);
+  setVisibility(visible) {
+    this.domText.hidden = !visible;
+  }
+}
 
-  module.exports = Title;
-});
+export default Title;
