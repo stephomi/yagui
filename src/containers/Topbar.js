@@ -31,6 +31,7 @@ class Topbar {
   addMenu(name) {
     var menu = new Menu();
     var li = document.createElement('li');
+    li.setAttribute('onclick', 'void(0)'); // iOS trick to trigger click on hover
     li.innerHTML = name || '';
     this.domUl.appendChild(li);
     li.appendChild(menu.domUl);
