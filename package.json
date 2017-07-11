@@ -1,6 +1,6 @@
 {
   "name": "yagui",
-  "main": "yagui.js",
+  "main": "build/yagui.js",
   "version": "1.7.0",
   "description": "Yet another javascript gui (for canvas centered WebGL app)",
   "devDependencies": {
