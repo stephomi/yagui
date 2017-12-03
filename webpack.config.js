@@ -1,4 +1,5 @@
 var path = require('path');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = function (env) {
   var config = {
@@ -22,22 +23,19 @@ module.exports = function (env) {
   var isRelease = env && env.release;
 
   if (!isRelease) {
-    config.devtool = 'eval';
-  } else {
-    config.devtool = 'source-map';
+    config.devtool = 'inline-cheap-source-map';
   }
 
   if (isRelease) {
+    config.plugins = [new UglifyJsPlugin()];
+
     config.module.rules.push({
       test: /\.js$/,
       exclude: [/node_modules/],
       use: [{
         loader: 'babel-loader',
         options: {
-          plugins: [
-            ['transform-es2015-classes', { loose: true }],
-            'transform-es2015-block-scoping'
-          ]
+          presets: ['@babel/preset-env']
         }
       }],
     });

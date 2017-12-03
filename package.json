@@ -1,18 +1,18 @@
 {
   "name": "yagui",
   "main": "build/yagui.js",
-  "version": "1.8.0",
+  "version": "2.0.0",
   "description": "Yet another javascript gui (for canvas centered WebGL app)",
-  "devDependencies": {
-    "babel-core": "^6.23.1",
-    "babel-loader": "^6.4.0",
-    "babel-plugin-transform-es2015-block-scoping": "^6.23.0",
-    "babel-plugin-transform-es2015-classes": "^6.23.0",
-    "webpack": "^2.2.1"
+  "dependencies": {
+    "@babel/core": "^7.0.0-beta.34",
+    "@babel/preset-env": "^7.0.0-beta.34",
+    "babel-loader": "8.0.0-beta.0",
+    "uglifyjs-webpack-plugin": "^1.1.2",
+    "webpack": "^3.9.1"
   },
   "scripts": {
     "dev": "webpack -w",
-    "release": "webpack -p --env.release"
+    "release": "webpack --env.release"
   },
   "repository": {
     "type": "git",
