@@ -1,5 +1,4 @@
 var path = require('path');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = function (env) {
   var config = {
@@ -7,7 +6,8 @@ module.exports = function (env) {
     output: {
       library: 'yagui',
       libraryTarget: 'umd',
-      filename: './build/yagui.js'
+      path: path.resolve(__dirname, 'build'),
+      filename: 'yagui.js'
     },
     resolve: {
       modules: [
@@ -22,16 +22,11 @@ module.exports = function (env) {
 
   var isRelease = env && env.release;
 
-  if (!isRelease) {
-    config.devtool = 'inline-cheap-source-map';
-  }
+  config.mode = isRelease ? 'production' : 'development';
 
   if (isRelease) {
-    config.plugins = [new UglifyJsPlugin()];
-
     config.module.rules.push({
       test: /\.js$/,
-      exclude: [/node_modules/],
       use: [{
         loader: 'babel-loader',
         options: {
