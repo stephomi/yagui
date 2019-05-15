@@ -1,7 +1,7 @@
 {
   "name": "yagui",
   "main": "build/yagui.js",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Yet another javascript gui (for canvas centered WebGL app)",
   "dependencies": {
     "@babel/core": "^7.4.4",
